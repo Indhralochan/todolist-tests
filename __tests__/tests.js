@@ -1,35 +1,55 @@
-const { expect, beforeAll } = require("@jest/globals");
-const todoList=require("../index");
-const {all, add, markAsComplete, overdue, dueToday, dueLater, toDisplayableList}=todoList();
-describe("todo test suite",()=>{
-    beforeAll(()=>{
-        add({
-            title:"test",
-            completed:false,
-            dueDate: "2022-09-17"
-          });
-    })
-    test('should add todo list', () => {
-      const todayItemCount= all.length;
-      add({
-        title:"test",
-        completed:false,
-        dueDate: "2022-09-17"
-      });
-      expect(all.length).toBe(todayItemCount+1); 
-    }) 
-    test('should checks marking a todo as completed.', () => {
-      expect(all[0].completed).toBe(false);
-      markAsComplete(0);
-      expect(all[0].completed).toBe(true);
-    })
-    test("Over due tasks", () => {
-      expect(overdue(all)).toBeDefined();
+/* eslint-disable no-undef */
+const { expect } = require("expect");
+const todo = require("../todo");
+const { all, add, markAsComplete, overdue, dueToday, dueLater } = todo();
+const today = new Date()
+describe("TODO test suite", () => {
+  beforeAll(() => {
+    add({
+      title: "Wake Up",
+      dueDate: today.toLocaleDateString("en-CA"),
+      completed: false
     });
-    test("Due today tasks", () => {
-      expect(dueToday(all)).toBeDefined();
+  });
+  test("Add task", () => {
+    let lengthBefore = all.length;
+    add({
+      title: "Eat",
+      dueDate: today.toLocaleDateString("en-CA"),
+      completed: false
     });
-    test("Due later tasks", () => {
-      expect(dueLater(all)).toBeDefined();
+    expect(all.length).toBe(lengthBefore + 1);
+  });
+  test("Mark task as complete", () => {
+    expect(all[0].completed).toBe(false)
+    markAsComplete(0);
+    expect(all[0].completed).toBe(true);
+  });
+  test("Over due tasks", () => {
+    const overduecount= overdue(all).length;
+    add({
+      title: "work",
+      dueDate: "2022-09-17",
+      completed: false
     });
-})
+    expect(overdue(all).length>overduecount);
+  });
+  test("Due today tasks", () => {
+    const duetodaycount= dueToday(all).length;
+    add({
+      title: "work",
+      dueDate: "2022-09-17",
+      completed: false
+    });
+    expect(dueToday(all).length>duetodaycount);
+  });
+  test("Due later tasks", () => {
+    const duelatercount= dueLater(all).length;
+    add({
+      title: "work",
+      dueDate: "2022-09-17",
+      completed: false
+    });
+    expect(dueLater(all).length>duelatercount);
+  });
+});

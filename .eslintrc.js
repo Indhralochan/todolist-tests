@@ -13,3 +13,4 @@ module.exports = {
     "rules": {
     }
 }
+/*eslint no-undef: "error"*/
