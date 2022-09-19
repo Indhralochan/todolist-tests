@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-const { expect } = require("expect");
 const todo = require("../todo");
 const { all, add, markAsComplete, overdue, dueToday, dueLater } = todo();
 const today = new Date()
@@ -37,8 +36,8 @@ describe("TODO test suite", () => {
   test("Due today tasks", () => {
     const duetodaycount= dueToday(all).length;
     add({
-      title: "work",
-      dueDate: "2022-09-17",
+      title: "work1",
+      dueDate: today.toLocaleDateString("en-CA"),
       completed: false
     });
     expect(dueToday(all).length>duetodaycount);
@@ -46,8 +45,8 @@ describe("TODO test suite", () => {
   test("Due later tasks", () => {
     const duelatercount= dueLater(all).length;
     add({
-      title: "work",
-      dueDate: "2022-09-17",
+      title: "work2",
+      dueDate: "2022-09-20",
       completed: false
     });
     expect(dueLater(all).length>duelatercount);
